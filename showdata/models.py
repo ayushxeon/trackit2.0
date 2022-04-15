@@ -1,4 +1,3 @@
-from turtle import mode
 from django.db import models
 
 category_ch=(("speedbreaker","speedbreaker"),("normal","normal"),("rough_surface","rough_surface"),("Descend","Descend"),("ascend","ascend"),("obstacle","obstacle"))
