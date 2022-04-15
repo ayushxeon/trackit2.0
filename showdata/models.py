@@ -46,7 +46,7 @@ class Rawdata(models.Model):
     vehicleName = models.ForeignKey(Vehicle,on_delete=models.CASCADE)
     placeName= models.ForeignKey(Location,on_delete=models.CASCADE)
     total_time=models.DurationField()
-    fluctuation=models.PositiveIntegerField(default=0)
+    fluctuation=models.PositiveIntegerField(default=0,null=True)
     # break1=models.CharField(max_length=51,null=True,blank=True)
     # break2=models.CharField(max_length=51,null=True,blank=True)
     # break3=models.CharField(max_length=51,null=True,blank=True)
