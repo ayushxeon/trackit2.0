@@ -5,37 +5,16 @@
       <th>location</th>
       <th>vehicle</th>
       <th>time taken</th>
-      <th>break1</th>
-      <th>break2</th>
-      <th>break3</th>
-      <th>break4</th>
-      <th>break5</th>
-      <th>break6</th>
-      <th>break7</th>
-      <th>break8</th>
-      <th>break9</th>
-      <th>break10</th>
-      <th>break11</th>
-      <th>break12</th>
+      <th>result</th>
+      <th>total_fluctuation</th>
     </tr>
     {%for object in objects%}
     <tr>
       <td>{{object.placeName}}</td>
       <td>{{object.vehicleName}}</td>
       <td>{{object.totaltime}}</td>
-      <td>{{object.break1}}</td>
-      <td>{{object.break2}}</td>
-      <td>{{object.break3}}</td>
-      <td>{{object.break4}}</td>
-      <td>{{object.break5}}</td>
-      <td>{{object.break6}}</td>
-      <td>{{object.break7}}</td>
-      <td>{{object.break8}}</td>
-      <td>{{object.break9}}</td>
-      <td>{{object.break10}}</td>
-      <td>{{object.break11}}</td>
-      <td>{{object.break12}}</td>
       <td>{{object.result}}</td>
+      <td>{{object.fluctuation}}</td>
     </tr>
     {%endfor%}
     
