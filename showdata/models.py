@@ -1,3 +1,4 @@
+from turtle import mode
 from django.db import models
 
 category_ch=(("speedbreaker","speedbreaker"),("normal","normal"),("rough_surface","rough_surface"),("Descend","Descend"),("ascend","ascend"),("obstacle","obstacle"))
@@ -24,22 +25,40 @@ class weather(models.Model):
     def __Str__(self):
         return f'{self.weather_condition}'
 
+class Entity(models.Model):
+    vehicleName = models.ForeignKey(Vehicle,on_delete=models.CASCADE)
+    placeName= models.ForeignKey(Location,on_delete=models.CASCADE)
+    trialNumber=models.PositiveIntegerField()
+    starttime=models.DateTimeField(auto_now_add=True)
+    data = models.ManyToManyField('Tempdata')
+
+    def __Str__(self):
+        return f'{self.trialNumber}'
+
+class Tempdata(models.Model):
+    distance=models.CharField(max_length=51)
+    count=models.IntegerField(default=-1)
+
+    def __Str__(self):
+        return f'{self.trialNumber}'
+
+
 class Rawdata(models.Model):
     vehicleName = models.ForeignKey(Vehicle,on_delete=models.CASCADE)
     placeName= models.ForeignKey(Location,on_delete=models.CASCADE)
     total_time=models.PositiveIntegerField()
-    break1=models.IntegerField(null=True,blank=True)
-    break2=models.IntegerField(null=True,blank=True)
-    break3=models.IntegerField(null=True,blank=True)
-    break4=models.IntegerField(null=True,blank=True)
-    break5=models.IntegerField(null=True,blank=True)
-    break6=models.IntegerField(null=True,blank=True)
-    break7=models.IntegerField(null=True,blank=True)
-    break8=models.IntegerField(null=True,blank=True)
-    break9=models.IntegerField(null=True,blank=True)
-    break10=models.IntegerField(null=True,blank=True)
-    break11=models.IntegerField(null=True,blank=True)
-    break12=models.IntegerField(null=True,blank=True)
+    break1=models.CharField(max_length=51,null=True,blank=True)
+    break2=models.CharField(max_length=51,null=True,blank=True)
+    break3=models.CharField(max_length=51,null=True,blank=True)
+    break4=models.CharField(max_length=51,null=True,blank=True)
+    break5=models.CharField(max_length=51,null=True,blank=True)
+    break6=models.CharField(max_length=51,null=True,blank=True)
+    break7=models.CharField(max_length=51,null=True,blank=True)
+    break8=models.CharField(max_length=51,null=True,blank=True)
+    break9=models.CharField(max_length=51,null=True,blank=True)
+    break10=models.CharField(max_length=51,null=True,blank=True)
+    break11=models.CharField(max_length=51,null=True,blank=True)
+    break12=models.CharField(max_length=51,null=True,blank=True)
     result=models.CharField(choices=category_ch,max_length=128)
     time=models.DateTimeField()
     weather_condition=models.CharField(choices=env_ch,max_length=128,null=True,blank=True)

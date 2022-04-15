@@ -6,9 +6,9 @@ import datetime
 from django.db.models import Count
 
 from .forms import NameForm
-from .models import Location,Vehicle,Rawdata,Final, weather
+from .models import Location,Vehicle,Rawdata,Final, weather,Entity,Tempdata
 
-minimal_time=12;
+minimal_time=12
 
 
 def index(request):
@@ -70,7 +70,7 @@ def raw_data_api(request):
         placefind=Rawdata.objects.filter(placeName=forplace)
         max=placefind.count()
         
-        final=NULL
+        # final=NULL
         for s in set:
             if s.count>max/2:
                 percentage=s.count*100/max
@@ -90,3 +90,23 @@ def raw_data_api(request):
         return redirect('showdata:raw')
     return JsonResponse({'Failed':'Method Not Allowed!'}) 
 
+
+@csrf_exempt
+def receive_dist_data(request):
+    if(request.method == "POST"):
+        data = request.body
+        data = json.loads(data)
+        print(data)
+        # get Vehicle and location
+        vehicle = Vehicle.objects.filter(is_active=True).first()
+        location = Location.objects.filter(is_active=True).first()
+        print(vehicle,location)
+        obj,created = Entity.objects.get_or_create(trialNumber=data['uniqueId'],vehicleName=vehicle,placeName=location)
+
+        curr_count = obj.data.all().count()
+        curr_count+=1
+        data_obj = Tempdata.objects.create(distance=data['distance'],count=curr_count)
+        obj.data.add(data_obj)
+    
+        return JsonResponse({"Success":"Data Added!"})
+    return JsonResponse({'Failed':'Method Not Allowed!'}) 
