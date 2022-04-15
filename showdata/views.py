@@ -62,6 +62,7 @@ def raw_data_api(request):
         forvehicle =Vehicle.objects.filter(is_active=True).first()
         forplace=Location.objects.filter(is_active=True).first()
         forweather=weather.objects.filter(is_active=True).first()
+        forentity=Entity.objects.filter(is_active=True).first()
 
         if(counts<min_count):
             if(time_taken<= minimal_time):
@@ -123,9 +124,11 @@ def raw_data_api(request):
         forvehicle.is_active=False
         forplace.is_active=False
         forweather.is_active=False
+        forentity.is_active=False
         forweather.save()
         forvehicle.save()
         forplace.save()
+        forentity.save()
         
 
         return redirect('showdata:raw')
