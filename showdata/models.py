@@ -45,21 +45,22 @@ class Tempdata(models.Model):
 class Rawdata(models.Model):
     vehicleName = models.ForeignKey(Vehicle,on_delete=models.CASCADE)
     placeName= models.ForeignKey(Location,on_delete=models.CASCADE)
-    total_time=models.PositiveIntegerField()
-    break1=models.CharField(max_length=51,null=True,blank=True)
-    break2=models.CharField(max_length=51,null=True,blank=True)
-    break3=models.CharField(max_length=51,null=True,blank=True)
-    break4=models.CharField(max_length=51,null=True,blank=True)
-    break5=models.CharField(max_length=51,null=True,blank=True)
-    break6=models.CharField(max_length=51,null=True,blank=True)
-    break7=models.CharField(max_length=51,null=True,blank=True)
-    break8=models.CharField(max_length=51,null=True,blank=True)
-    break9=models.CharField(max_length=51,null=True,blank=True)
-    break10=models.CharField(max_length=51,null=True,blank=True)
-    break11=models.CharField(max_length=51,null=True,blank=True)
-    break12=models.CharField(max_length=51,null=True,blank=True)
+    total_time=models.DurationField()
+    fluctuation=models.PositiveIntegerField(default=0)
+    # break1=models.CharField(max_length=51,null=True,blank=True)
+    # break2=models.CharField(max_length=51,null=True,blank=True)
+    # break3=models.CharField(max_length=51,null=True,blank=True)
+    # break4=models.CharField(max_length=51,null=True,blank=True)
+    # break5=models.CharField(max_length=51,null=True,blank=True)
+    # break6=models.CharField(max_length=51,null=True,blank=True)
+    # break7=models.CharField(max_length=51,null=True,blank=True)
+    # break8=models.CharField(max_length=51,null=True,blank=True)
+    # break9=models.CharField(max_length=51,null=True,blank=True)
+    # break10=models.CharField(max_length=51,null=True,blank=True)
+    # break11=models.CharField(max_length=51,null=True,blank=True)
+    # break12=models.CharField(max_length=51,null=True,blank=True)
     result=models.CharField(choices=category_ch,max_length=128)
-    time=models.DateTimeField()
+    time=models.DateTimeField(auto_now_add=True)
     weather_condition=models.CharField(choices=env_ch,max_length=128,null=True,blank=True)
 
     def __str__(self):
@@ -67,7 +68,7 @@ class Rawdata(models.Model):
 
 class Final(models.Model):
     placeName= models.ForeignKey(Location,on_delete=models.CASCADE)
-    chances=models.PositiveIntegerField(blank=True,null=True)
+    chances=models.DecimalField(blank=True,null=True,max_digits=5,decimal_places=2)
     final_result=models.CharField(choices=category_ch,max_length=128)
 
     def __str__(self):

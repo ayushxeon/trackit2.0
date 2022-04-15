@@ -8,7 +8,11 @@ from django.db.models import Count
 from .forms import NameForm
 from .models import Location,Vehicle,Rawdata,Final, weather,Entity,Tempdata
 
-minimal_time=12
+minimal_time=5
+avg_time=20
+min_count=5
+avg_count=20
+
 
 
 def index(request):
@@ -45,37 +49,75 @@ def test(request):
     return render(request, 'test.html', {'form': form})
 
 
-def raw_data_api(request,unique_id):
-    if(request.method == 'GET'):
+def raw_data_api(request):
+    if(request.method == 'POST'):
         data = request.body
         data = json.loads(data)
         
-        time_taken=data['endtime']-data['starttime']
-        print(time_taken)
-        if(time_taken<=minimal_time):
-            l=len(data['arraytime'])/12
-            breakvalue=[]
-            breaks=[]
-            for x in range(12):
-                breaks.append(math.floor(x*l))
-                breakvalue.append(data["arraytime"][breaks[x]])
-                # print(f'{breakvalue[x]} at {breaktime[x]}')
-                
+        obj=Entity.objects.filter(is_active=True)
+        starttime=obj.starttime
+        time_taken=datetime.datetime.now()-starttime
+        counts=data['fluctuation']
+
         forvehicle =Vehicle.objects.filter(is_active=True).first()
         forplace=Location.objects.filter(is_active=True).first()
         forweather=weather.objects.filter(is_active=True).first()
-        time=datetime.datetime.now()
-        Rawdata.objects.create(weather_condition=forweather,time=time,vehicleName=forvehicle,placeName=forplace,total_time=time_taken,break1=breakvalue[0],break2=breakvalue[1],break3=breakvalue[2],break4=breakvalue[3],break5=breakvalue[4],break6=breakvalue[5],break7=breakvalue[6],break8=breakvalue[7],break9=breakvalue[8],break10=breakvalue[9],break11=breakvalue[10],break12=breakvalue[11])
+
+        if(counts<min_count):
+            if(time_taken<= minimal_time):
+                result="small_speedbreaker"
+            
+            elif(time_taken>=minimal_time and time_taken<=avg_time):
+                result="speedbreaker"
+
+            else:
+                result="ascend_descend"
+        
+        elif(counts>=min_count and counts<=avg_count):
+            if(time_taken<= minimal_time):
+                result="high_speedbreaker";
+            
+            elif(time_taken>=minimal_time and time_taken<=avg_time):
+                result="speedbreaker"
+
+            else:
+                result="big_speedbreaker"
+
+        elif(counts>avg_count):
+            if(time_taken<= minimal_time):
+                result="bump or_pit";
+            
+            elif(time_taken>=minimal_time and time_taken<=avg_time):
+                result="rough_surface"
+
+            else:
+                result="extreme_condition"
+
+
+        Rawdata.objects.create(weather_condition=forweather,vehicleName=forvehicle,placeName=forplace,total_time=time_taken,fluctuation=counts,result=result)
         placefind=Rawdata.objects.filter(placeName=forplace)
         max=placefind.count()
         
         # final=NULL
-        for s in set:
-            if s.count>max/2:
-                percentage=s.count*100/max
-                final=s.result
+        # for s in set:
+        #     if s.count>max/2:
+        #         percentage=s.count*100/max
+        #         final=s.result
+        mapp = {}
+        for i in placefind:
+            mapp[i.result] = mapp.get(i.result,0) + 1
         
-        Final.objects.create(placeName=forplace,chances=percentage,result=final)
+        maxValue = 0
+        maxCount = 0
+        for x,y in mapp.items():
+            if(maxCount>y):
+                maxValue = x
+                maxCount = y
+
+        percentage=maxCount/max*100
+        final=maxValue
+
+        Final.objects.update_or_create(placeName=forplace,chances=percentage,result=final)
 
         
         forvehicle.is_active=False
@@ -100,7 +142,7 @@ def receive_dist_data(request):
         vehicle = Vehicle.objects.filter(is_active=True).first()
         location = Location.objects.filter(is_active=True).first()
         print(vehicle,location)
-        obj,created = Entity.objects.get_or_create(vehicleName=vehicle,placeName=location)
+        obj,created = Entity.objects.get_or_create(vehicleName=vehicle,placeName=location,is_active=True)
 
         curr_count = obj.data.all().count()
         curr_count+=1
