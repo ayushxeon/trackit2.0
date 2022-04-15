@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
