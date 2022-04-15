@@ -11,6 +11,6 @@ urlpatterns=[
     path('waiting/',views.wait,name='wait'),
 
     # APIs
-    path('api/collect/',views.raw_data_api,name='collect'),
+    path('api/collect/<unique_id>/',views.raw_data_api,name='collect'),
     path('api/receive-data/',views.receive_dist_data),
 ]

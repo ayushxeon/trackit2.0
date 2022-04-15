@@ -28,9 +28,9 @@ class weather(models.Model):
 class Entity(models.Model):
     vehicleName = models.ForeignKey(Vehicle,on_delete=models.CASCADE)
     placeName= models.ForeignKey(Location,on_delete=models.CASCADE)
-    trialNumber=models.PositiveIntegerField()
     starttime=models.DateTimeField(auto_now_add=True)
     data = models.ManyToManyField('Tempdata')
+    is_active = models.BooleanField(default=False)
 
     def __Str__(self):
         return f'{self.trialNumber}'

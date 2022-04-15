@@ -45,9 +45,8 @@ def test(request):
     return render(request, 'test.html', {'form': form})
 
 
-@csrf_exempt
-def raw_data_api(request):
-    if(request.method == 'POST'):
+def raw_data_api(request,unique_id):
+    if(request.method == 'GET'):
         data = request.body
         data = json.loads(data)
         
@@ -101,7 +100,7 @@ def receive_dist_data(request):
         vehicle = Vehicle.objects.filter(is_active=True).first()
         location = Location.objects.filter(is_active=True).first()
         print(vehicle,location)
-        obj,created = Entity.objects.get_or_create(trialNumber=data['uniqueId'],vehicleName=vehicle,placeName=location)
+        obj,created = Entity.objects.get_or_create(vehicleName=vehicle,placeName=location)
 
         curr_count = obj.data.all().count()
         curr_count+=1
