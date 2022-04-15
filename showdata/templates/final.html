@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<table>
+    <tr>
+      <th>location</th>
+      <th>chances</th>
+      <th>result</th>
+    </tr>
+    {%for object in objects}
+    <tr>
+      <td>{{object.placeName}}</td>
+      <td>{{object.chances}}</td>
+      <td>{{object.result}}</td>
+    </tr>
+    
+  </table>
+{% endblock %}

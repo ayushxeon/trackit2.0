@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content%}
+<br>
+<a href="{% url 'showdata:raw' %}">RAW</a>
+<br>
+<a href="{% url 'showdata:final' %}">FINAL</a>
+<br>
+<a href="{% url 'showdata:test'%}">TEST</a>
+<br>
+
+
+{% endblock %}
