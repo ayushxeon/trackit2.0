@@ -8,12 +8,12 @@
 2) `cd trackit2.0`
 3) `python -m venv env`
 4) `source env/bin/activate` (Mac/Linux)<br>
-   `env/Scripts/activate.ps1` (Windows-Powershell)
+   `env\Scripts\activate` (Windows-Powershell)
 5) `pip install -r requirements.txt`
 
 Start Development Server<br>
 ---
 Running Django Server
 1) `source env/bin/activate` (Mac/Linux)<br>
-   `env/Scripts/activate.ps1` (Windows-Powershell)
+   `env\Scripts\activate` (Windows-Powershell)
 2) `python manage.py runserver`
