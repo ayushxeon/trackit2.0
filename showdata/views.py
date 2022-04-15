@@ -48,7 +48,7 @@ def test(request):
     form = NameForm()
     return render(request, 'test.html', {'form': form})
 
-
+@csrf_exempt
 def raw_data_api(request):
     if(request.method == 'POST'):
         data = request.body
