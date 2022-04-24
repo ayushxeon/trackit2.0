@@ -8,15 +8,15 @@
       <th>result</th>
       <th>total_fluctuation</th>
     </tr>
-    {%for object in objects%}
+    {% for object in objects %}
     <tr>
-      <td>{{object.placeName}}</td>
-      <td>{{object.vehicleName}}</td>
-      <td>{{object.totaltime}}</td>
-      <td>{{object.result}}</td>
-      <!-- <td>{{object.fluctuation}}</td> -->
+      <td>{{objects.placeName}}</td>
+      <td>{{objects.vehicleName}}</td>
+      <td>{{objects.totaltime}}</td>
+      <td>{{objects.result}}</td>
+      <td>{{objects.fluctuation}}
     </tr>
-    {%endfor%}
+    {% endfor %}
     
-  </table>
+</table>
 {% endblock %}

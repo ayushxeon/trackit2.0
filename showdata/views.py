@@ -11,7 +11,7 @@ from .models import Location,Vehicle,Rawdata,Final, weather,Entity,Tempdata
 minimal_time=5
 avg_time=20
 min_count=5
-avg_count=20
+avg_count=15
 
 
 
@@ -51,48 +51,53 @@ def test(request):
 @csrf_exempt
 def raw_data_api(request):
     if(request.method == 'POST'):
+
         data = request.body
         data = json.loads(data)
         
-        obj=Entity.objects.filter(is_active=True)
-        starttime=obj.starttime
-        time_taken=datetime.datetime.now()-starttime
-        counts=data['fluctuation']
+        if(data!=-1):
+            obj=Entity.objects.filter(is_active=True)
+            starttime=obj.starttime
+            time_taken=datetime.datetime.now()-starttime
+            counts=data['fluctuation']
 
-        forvehicle =Vehicle.objects.filter(is_active=True).first()
-        forplace=Location.objects.filter(is_active=True).first()
-        forweather=weather.objects.filter(is_active=True).first()
-        forentity=Entity.objects.filter(is_active=True).first()
+            forvehicle =Vehicle.objects.filter(is_active=True).first()
+            forplace=Location.objects.filter(is_active=True).first()
+            forweather=weather.objects.filter(is_active=True).first()
+            forentity=Entity.objects.filter(is_active=True).first()
 
-        if(counts<min_count):
-            if(time_taken<= minimal_time):
-                result="small_speedbreaker"
+            if(counts<min_count):
+                if(time_taken<= minimal_time):
+                    result="small_speedbreaker"
+                
+                elif(time_taken>=minimal_time and time_taken<=avg_time):
+                    result="speedbreaker"
+
+                else:
+                    result="ascend_descend"
             
-            elif(time_taken>=minimal_time and time_taken<=avg_time):
-                result="speedbreaker"
+            elif(counts>=min_count and counts<=avg_count):
+                if(time_taken<= minimal_time):
+                    result="high_speedbreaker";
+                
+                elif(time_taken>=minimal_time and time_taken<=avg_time):
+                    result="speedbreaker"
 
-            else:
-                result="ascend_descend"
+                else:
+                    result="big_speedbreaker"
+
+            elif(counts>avg_count):
+                if(time_taken<= minimal_time):
+                    result="bump or_pit";
+                
+                elif(time_taken>=minimal_time and time_taken<=avg_time):
+                    result="rough_surface"
+
+                else:
+                    result="extreme_condition"
         
-        elif(counts>=min_count and counts<=avg_count):
-            if(time_taken<= minimal_time):
-                result="high_speedbreaker";
-            
-            elif(time_taken>=minimal_time and time_taken<=avg_time):
-                result="speedbreaker"
-
-            else:
-                result="big_speedbreaker"
-
-        elif(counts>avg_count):
-            if(time_taken<= minimal_time):
-                result="bump or_pit";
-            
-            elif(time_taken>=minimal_time and time_taken<=avg_time):
-                result="rough_surface"
-
-            else:
-                result="extreme_condition"
+        else:
+            result="Data readings were wrong/it has errors"
 
 
         Rawdata.objects.create(weather_condition=forweather,vehicleName=forvehicle,placeName=forplace,total_time=time_taken,fluctuation=counts,result=result)
